@@ -13,6 +13,8 @@ import json
 import sys
 import docx2txt
 
+## tato část načte JSON s informacemi o knize
+
 with open(sys.argv[1], "r", encoding="utf-8") as project:
     project = project.read()
     project = json.loads(project)
@@ -32,6 +34,8 @@ except:
 bookChapters = []
 bookParagraphs = []
 
+## tato část načte jednotlivé kapitoly
+
 for chapter in chapters:
     chapterText = docx2txt.process(chapter)
     chapterParagraphs = chapterText.splitlines()
@@ -40,21 +44,29 @@ for chapter in chapters:
     bookChapters.append(chapterText)
     bookParagraphs.append(chapterParagraphs)
 
+## tato funkce simuluje listování knihou
+    
 def glimpse(bookParagraphs):
     for x in bookParagraphs:
         print("\n".join(x[0:headerLines]))
         print("\n")
 
+## tato funkce vypisuje první odstavce kapitol
+        
 def firstParagraphs(bookParagraphs):
     for x in bookParagraphs:
         print(x[headerLines][:200])
         print("\n")
 
+## tato funkce vypisuje poslední odstavce kapitol
+        
 def lastParagraphs(bookParagraphs):
     for x in bookParagraphs:
         print(x[-1][-200:])
         print("\n")
 
+## tato funkce vypisuje první zmínky jmen i s okolím
+        
 def firstMentions(bookParagraphs):
     for x in bookParagraphs:
         namesFound = []
@@ -66,6 +78,8 @@ def firstMentions(bookParagraphs):
                         print(name + ": " + paragraph + "\n")
                         namesFound.append(name)
 
+## tato funkce fulltextově hledá ve všech kapitolách
+                        
 def findEverything(bookParagraphs, search):
     count = 0
     for x in bookParagraphs:
@@ -76,6 +90,8 @@ def findEverything(bookParagraphs, search):
                 count = count + 1
     print (search + ": found " + str(count) + " times")
 
+## tato funkce vizualizuje délku kapitol
+    
 def chapterLenght(bookChapters):
     longestChapter = max(bookChapters, key = len)
     longestChapter = len(longestChapter)
@@ -90,6 +106,8 @@ def chapterLenght(bookChapters):
         print(header)
         print(paragraphsBlocks, "\n")
 
+## tato funkce vizualizuje délku podkapitol
+        
 def subChapterLenght(bookParagraphs):
     for x in bookParagraphs:
         print(x[0])
@@ -106,12 +124,16 @@ def subChapterLenght(bookParagraphs):
             print(paragraphsBlocks)
         print("\n")
 
+## tato funkce počítá celkový rozsah
+        
 def totalLenght(bookChapters):
     lenght = 0
     for x in bookChapters:
         lenght = lenght + len(x)
     print("Total characters: " + str(lenght))
 
+## zde skript čte pokyn z příkazové řádky a volá příslušnou funkci
+    
 if sys.argv[2] == "glimpse":
     glimpse(bookParagraphs)
 
